@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
+  <Project Path="GitHubIssueTriageAgent/GitHubIssueTriageAgent.csproj" />
+  <Project Path="GitHubIssueTriageShared/GitHubIssueTriageShared.csproj" Id="bf0542ca-5808-40bf-9b9f-179d74c4c9c2" />
+  <Project Path="GithubIssueTriageWeb/GithubIssueTriageWeb.csproj" />
+</Solution>

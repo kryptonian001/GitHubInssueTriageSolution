@@ -1,0 +1,23 @@
+services:
+  githubissuetriageweb:
+    image: ${DOCKER_REGISTRY-}githubissuetriageweb:v1.0.1
+    ports:
+      - "7082:8080"   
+    build:
+      context: .
+      dockerfile: GithubIssueTriageWeb/Dockerfile
+    networks:
+      - github-triage-network
+
+  ngrok:
+    image: ngrok/ngrok:latest
+    command: http githubissuetriageweb:8080 --url https://dante-flamba-superbenignly.ngrok-free.app
+    environment:
+      NGROK_AUTHTOKEN: "${NGROK_AUTHTOKEN}"
+    depends_on:
+      - githubissuetriageweb
+    ports:
+      - "4040:4040"
+    networks:
+      - github-triage-network
+    restart: unless-stopped

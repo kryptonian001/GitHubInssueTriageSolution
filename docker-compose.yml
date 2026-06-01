@@ -1,0 +1,42 @@
+services:
+  servicebus-emulator:
+    container_name: servicebus-emulator
+    image: mcr.microsoft.com/azure-messaging/servicebus-emulator:latest
+    pull_policy: always
+    volumes:
+      - "./servicebus-config.json:/ServiceBus_Emulator/ConfigFiles/Config.json"
+    ports:
+      - "5672:5672"
+      - "5300:5300"
+    environment:
+      SQL_SERVER: sqledge
+      MSSQL_SA_PASSWORD: "${SQL_PASSWORD}"
+      ACCEPT_EULA: "Y"
+      SQL_WAIT_INTERVAL: "15"
+      EMULATOR_HTTP_PORT: "5300"
+    depends_on:
+      sqledge:
+        condition: service_healthy
+    networks:
+      github-triage-network:
+        aliases:
+          - servicebus-emulator
+
+  sqledge:
+    container_name: sqledge
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "${SQL_PASSWORD}"
+    healthcheck:
+      test: ["CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "${SQL_PASSWORD}", "-Q", "SELECT 1"]
+      interval: 3s
+      timeout: 5s
+      retries: 10
+    networks:
+      - github-triage-network
+
+
+networks:
+  github-triage-network:
+    driver: bridge
