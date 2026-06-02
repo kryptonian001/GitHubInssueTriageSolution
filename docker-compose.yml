@@ -8,6 +8,12 @@ services:
     ports:
       - "5672:5672"
       - "5300:5300"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5300/health || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
     environment:
       SQL_SERVER: sqledge
       MSSQL_SA_PASSWORD: "${SQL_PASSWORD}"
