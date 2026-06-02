@@ -1,6 +1,6 @@
 services:
   githubissuetriageagent:
-    image: ${DOCKER_REGISTRY-}githubissuetriageagent:v1.0.1
+    image: ${DOCKER_REGISTRY-}githubissuetriageagent:v1.0.2
     command: ["-d", "45"]
     env_file:
       - .env
